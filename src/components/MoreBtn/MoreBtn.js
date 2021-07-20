@@ -1,10 +1,11 @@
 import React from 'react';
 import './MoreBtn.css';
 
-function MoreBtn() {
+function MoreBtn({ handleMoreBtn, isMoreBtnVisible }) {
   return (
+    isMoreBtnVisible &&
     <div className="more-btn">
-      <p className="more-btn__text" >Ещё</p>
+      <p className="more-btn__text" onClick={handleMoreBtn}>Ещё</p>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import MyPhoto from '../../images/MyPhoto.png'
+import MyPhoto from '../../images/me.jfif'
 import './AboutMe.css';
 
 function AboutMe() {
@@ -8,14 +8,12 @@ function AboutMe() {
       <h2 className="about-me__title">Студент</h2>
       <div className="about-me__main">
         <div className="about-me__info">
-          <h3 className="about-me__name">Виталий</h3>
-          <p className="about-me__profession">Фронтенд-разработчик, 30 лет</p>
-          <p className="about-me__text">Я родился и живу в Саратове, закончил факультет экономики СГУ. У меня есть жена
-            и дочь. Я люблю слушать музыку, а ещё увлекаюсь бегом. Недавно начал кодить. С 2015 года работал в компании «СКБ Контур».
-            После того, как прошёл курс по веб-разработке, начал заниматься фриланс-заказами и ушёл с постоянной работы.</p>
+          <h3 className="about-me__name">Алексей</h3>
+          <p className="about-me__profession">Начинающий фронтенд-разработчик, 31 год</p>
+          <p className="about-me__text">Я живу в Москве. Закончил ВЗФЭИ, работаю авиатехнологом в сфере авиации в отделе разработок. Мне нравится моя работа, но программирование интереснее, поэтому собираюсь сменить сферу деятельности.  В данный момент ищу работу именно в IT. </p>
           <ul className="about-me__socials">
-            <li className="about-me__social"><a className="about-me__link" href="facebook.com">Facebook</a></li>
-            <li className="about-me__social"><a className="about-me__link" href="github.com">Github</a></li>
+            <li className="about-me__social"><a className="about-me__link"  target="blank" href="https://ru-ru.facebook.com/">Facebook</a></li>
+            <li className="about-me__social"><a className="about-me__link" target="blank" href="https://github.com/azhukovalex">Github</a></li>
           </ul>
         </div>
         <img className="about-me__photo" src={MyPhoto} alt="Фото автора" />

@@ -10,10 +10,10 @@ function Portfolio() {
           <a className="portfolio__link" target="blank" href="https://azhukovalex.github.io/how-to-learn/">Статичный сайт</a>
         </li>
         <li className="portfolio__item">
-          <a className="portfolio__link" target="blank"  href="https://azhukovalex.github.io/russian-travel/" >Адаптивный сайт</a>
+          <a className="portfolio__link" target="blank" href="https://azhukovalex.github.io/russian-travel/" >Адаптивный сайт</a>
         </li>
         <li className="portfolio__item">
-          <a className="portfolio__link" target="blank"  href="https://azhukovalex.github.io/mesto-react/" >Одностраничное приложение</a>
+          <a className="portfolio__link" target="blank" href="https://azhukovalex.github.io/mesto-react/" >Одностраничное приложение</a>
         </li>
       </ul>
     </div >

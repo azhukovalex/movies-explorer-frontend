@@ -30,9 +30,13 @@
 
 .footer__socials {
   list-style: none;
-
   display: flex;
   gap: 20px;
+}
+
+.footer__social:hover {
+  opacity: 0.8;
+  transition: opacity 0.2s linear;
 }
 
 .footer__link {

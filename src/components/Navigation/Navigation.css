@@ -1,3 +1,7 @@
+.active-link {
+  border-bottom: solid 2px #fff;
+}
+
 .header__nav {
   display: flex;
   gap: 30px;
@@ -19,11 +23,21 @@
   font-weight: 500;
 }
 
+.header__nav-movies:hover{
+  opacity: 0.8;
+  transition: opacity 0.2s linear;
+}
+
 .header__nav-saved {
   text-decoration: none;
   color: white;
   font-size: 14px;
   font-weight: 400;
+}
+
+.header__nav-saved:hover{
+  opacity: 0.8;
+  transition: opacity 0.2s linear;
 }
 
 .header__nav-profile {
@@ -36,6 +50,11 @@
   gap: 7px;
 }
 
+.header__nav-profile:hover{
+  opacity: 0.8;
+  transition: opacity 0.2s linear;
+}
+
 .header__nav-item {
   color: white;
   display: flex;
@@ -43,6 +62,10 @@
   font-size: 12px;
   letter-spacing: 1px;
   text-decoration: none;
+}
+.header__nav-item:hover {
+  opacity: 0.8;
+  transition: opacity 0.2s linear;
 }
 
 .header__nav-link {
@@ -57,6 +80,11 @@
   border: none;
   text-decoration: none;
   color: black;
+}
+
+.header__nav-link:hover {
+  background: #45fa96;
+  transition: background-color 0.2s linear;
 }
 
 .header__nav-main {
@@ -81,6 +109,10 @@
   display: none;
 }
 
+.nav__user-icon {
+  border-radius: 13px;
+}
+
 @media all and (max-width: 768px) {
   .header__nav-close-btn {
     background-image: url(../../images/CloseBtn.svg);
@@ -97,7 +129,7 @@
   }
 
   .header__nav-main {
-    display: flex;
+    display: block;
   }
 
   .header__nav-links {
@@ -120,6 +152,7 @@
     padding-top: 440px;
     z-index: 1;
   }
+
 
   .header__nav-mob_invisible {
     display: none;
@@ -160,32 +193,27 @@
 
 @media all and (max-width: 520px) {
   .header__nav-mob_visible {
-width: 100%;
+    width: 100%;
   }
-} 
+}
 @media all and (max-width: 400px) {
   .header__nav-item {
     font-size: 10px;
-
   }
-  
+
   .header__nav-link {
     font-size: 10px;
     width: 53px;
     height: 27px;
-
   }
 
   .header__burger-btn {
     width: 39px;
     height: 39px;
     background-size: contain;
-    
   }
 
   .header__nav-links {
     padding-top: 79px;
   }
-
-
 }
