@@ -1,0 +1,43 @@
+.not-found-error {
+  background-color: #202020;
+  height: 100vh;
+  font-family: inter;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.not-found-error__text {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.not-found-error__code {
+  font-size: 140px;
+}
+
+.not-found-error__description {
+  font-size: 16px;
+  text-align: center;
+  margin: 0 auto;
+  padding-bottom: 284px;
+}
+
+.not-found-error__back {
+  color: #4285f4;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+}
+
+@media all and (max-width: 400px) {
+  .not-found-error__code {
+    font-size: 80px;
+  }
+  .not-found-error__back {
+    font-size: 12px;
+  }
+}
