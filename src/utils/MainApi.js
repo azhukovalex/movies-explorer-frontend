@@ -115,7 +115,7 @@ class Api {
 }
 
 const MainApi = new Api({
-  baseUrl: "http://localhost:3001",
+  baseUrl: "https://azhukovalexback.vint1024.ru/",
 
 });
 
