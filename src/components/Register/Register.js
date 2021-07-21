@@ -14,7 +14,8 @@ function Register(props) {
     e.preventDefault();
     onRegister(values);
     resetForm();
-  };
+    };
+
   React.useEffect(() => {
     setIsLoggedIn(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps

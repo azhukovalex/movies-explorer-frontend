@@ -43,7 +43,7 @@ function MoviesCard(props) {
     setIsHover(!isHover);
   }
   //закладка
-  function saveOrDeleteMovies() {
+  function saveOrDelClick() {
     if (isAdded()) {
       const savedList = JSON.parse(localStorage.getItem('saved-movies'));
       const cardLiked = savedList.find((item) => item.nameRU === movie.nameRU);
@@ -73,7 +73,7 @@ function MoviesCard(props) {
               <h2 className="card__title" title={movie.nameRU}>{movie.nameRU}</h2>
               <p className="card__duration">{getTimeFromMins(time)}</p>
             </div>
-            <button className="card__tab card__tab_add" type="button" style={{ backgroundImage: "url(" + btnAddImg + ")" }} onClick={saveOrDeleteMovies} alt="закладка"></button>
+            <button className="card__tab card__tab_add" type="button" style={{ backgroundImage: "url(" + btnAddImg + ")" }} onClick={saveOrDelClick} alt="закладка"></button>
           </div>
           <a className="card__image" target="blank" href={movie.trailerLink}><img className="card__image" src={props.image} alt={movie.nameRU} /></a>
         </div>

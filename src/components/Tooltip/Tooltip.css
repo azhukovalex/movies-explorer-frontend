@@ -1,6 +1,8 @@
 .popup__image_login {
   width: 120px;
   height: 120px;
+  background-size: contain;
+  background-repeat: no-repeat;
   margin: 60px auto 8px;
   -webkit-transition: visibility 0.5s, opacity 0.5s ease;
   transition: visibility 0.5s, opacity 0.5s ease;
@@ -144,7 +146,6 @@
   bottom: 0;
   background: #000000;
   opacity: 0.9;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
 }
 
 .popup__title {
@@ -156,7 +157,21 @@
 }
 
 @media (max-width: 619px) {
-  .popup__title {
-    width: 190px;
-  }
+  .popup__tip {
+    text-align: center;
+    width: 216px;
+    height: 216px;
+    align-items: center;
+}
+.popup__image_login {
+  margin: 17px auto 4px;
+}
+
+.popup__title {
+
+  font-size: 13px;
+  line-height: 16px;
+  width: 100px;
+  margin: 0 0 12px;
+}
 }
