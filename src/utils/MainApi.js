@@ -123,7 +123,7 @@ class Api {
 }
 
 const MainApi = new Api({
-  baseUrl: "https://azhukovalexback.vint1024.ru/",
+  baseUrl: "https://azhukovalexback.vint1024.ru",
 
 });
 
