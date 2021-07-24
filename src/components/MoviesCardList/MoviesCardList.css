@@ -11,7 +11,10 @@
     color: #555555;
     font-size: 20px;
     padding-top: 153px;
+    text-align: center;
 }
+
+
 
 @media all and (max-width: 400px) {
     .movies__card-list {

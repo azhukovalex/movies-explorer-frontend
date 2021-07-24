@@ -1,3 +1,7 @@
+
+
+
+
 .card {
   min-height: 258px;
   max-width: 364px;
@@ -54,7 +58,7 @@
   cursor: pointer;
 }
 
-.card__tab_del {
+.card__tab_del:hover {
   background-image: url("../../images/DeleteMovieBtnHover.svg");
 }
 

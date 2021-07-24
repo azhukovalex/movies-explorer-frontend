@@ -3,39 +3,49 @@ import './SavedMovies.css';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function SavedMovies(props) {
-  const [searchSubmit, setSearchSubmit] = React.useState(false);
-  const [checkboxOn, setcheckboxOn] = React.useState(false);
+  const { isPreloader, handleSearch, removeMovieHandler, searchKeyWord, } = props;
+  const currentUser = React.useContext(CurrentUserContext);
+  const [cardList, setCardsList] = React.useState([]);
+  const [savedMovieEerorMessage, setSavedMovieEerorMessage] = React.useState('');
+  const [SavedMovieIsError, setSavedMovieIsError] = React.useState(false);
 
-  const { userData, currentUser, getUserContent, isLoading, movies, handleSetMovies, handleDeleteMovies, handleSaveMovies, resultMessage, imageUrl, handleSearchShortMovies, renderedMovies, searchShortMovies } = props;
+  function handleSubmit(keyWord, isShort) {
+    const found = handleSearch(currentUser.savedMoviesArray, keyWord, isShort);
+    setCardsList(found);
+    if (found < 1) {
+      setSavedMovieIsError(true);
+      setSavedMovieEerorMessage('Ничего не найдено');
+    }
+  }
+
+  function handleDelMovie(data) {
+    removeMovieHandler(data);
+    setCardsList(currentUser.savedMoviesArray.filter((item) => item.movieId !== data.movieId));
+  }
 
   return (
     <div className="movies__main-saved">
-      {isLoading && <Preloader />}
       <SearchForm
-        handleSetMovies={handleSetMovies}
-        handleSearchShortMovies={handleSearchShortMovies}
-        setSearchSubmit={setSearchSubmit}
-        setcheckboxOn={setcheckboxOn}
-        checkboxOn={checkboxOn} />
-      <MoviesCardList
-        currentUser={currentUser}
-        userData={userData}
-        getUserContent={getUserContent}
-        searchShortMovies={searchShortMovies}
-        handleDeleteMovies={handleDeleteMovies}
-        searchSubmit={searchSubmit}
-        setSearchSubmit={setSearchSubmit}
-        handleSaveMovies={handleSaveMovies}
-        handleSetMovies={handleSetMovies}
-        renderedMovies={renderedMovies}
-        resultMessage={resultMessage}
-        movies={movies}
-        checkboxOn={checkboxOn}
-        imageUrl={imageUrl} />
+        handleSearch={handleSubmit}
+        searchKeyWord={searchKeyWord}
+        isPreloader={isPreloader}
+      />
+      {isPreloader ? <Preloader />
+        :
+        SavedMovieIsError ? <p className="card-list__text">{savedMovieEerorMessage}</p>
+          :
+          <MoviesCardList
+            cardsData={cardList}
+            removeMovieHandler={handleDelMovie}
+            
+          />}
     </div>
   );
 }
 
 export default SavedMovies;
+
+

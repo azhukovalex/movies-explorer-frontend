@@ -22,7 +22,7 @@ class Api {
       });
   }
 
-  getAllMovies(token) {
+  getMovies(token) {
     return fetch(`${this._url}/movies`, {
       method: 'GET',
       headers: {
@@ -32,7 +32,7 @@ class Api {
       }
     })
       .then(res => {
-        console.log("getAllMovies OK");
+        console.log("getMovies OK");
         if (res.ok) {
           return res.json();
         } else {
@@ -69,8 +69,7 @@ class Api {
       return Promise.reject(err);
   });
   }
-
-  createNewCard({ country, director, duration, year, description, image, trailer, nameRU, nameEN, thumbnail, movieId }, token) {
+  createNewCard(data, token) {
     return fetch(`${this._url}/movies`, {
       method: 'POST',
       headers: {
@@ -79,7 +78,17 @@ class Api {
         'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify({
-        country, director, duration, year, description, image, trailer, nameRU, nameEN, thumbnail, movieId,
+        country: data.country,
+        director: data.director,
+        duration: +data.duration,
+        year: +data.year,
+        description: data.description,
+        image: `https://api.nomoreparties.co${data.image.url}`,
+        trailer: data.trailerLink,
+        thumbnail: `https://api.nomoreparties.co${data.image.formats.thumbnail.url}`,
+        movieId: data.id,
+        nameRU: data.nameRU,
+        nameEN: data.nameEN
       })
     })
       .then(res => {
@@ -90,7 +99,6 @@ class Api {
         return Promise.reject(`Ошибка: ${res.status}`);
       });
   }
-
   deleteCard(movieId, token) {
     console.log(movieId);
     console.log("токен:" + token);

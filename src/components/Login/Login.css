@@ -87,10 +87,10 @@
 }
 
 .login-form__submit__error {
-  background-color: #97b9f0;
+  background-color: #8b929c;
 }
 .login-form__submit__error:hover {
-  background-color: #97b9f0;
+  background-color: #8b929c;
   cursor: default;
 }
 

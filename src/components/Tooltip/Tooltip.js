@@ -7,9 +7,11 @@ function InfoTooltip(props) {
   const { isTooltipOpen, onClose, successToolTip, isTooltipProfile, isTooltipLogin} = props;
   const errorImg = {
     backgroundImage: "url(" + union + ")",
+    
   };
   const successImg = {
     backgroundImage: "url(" + icon + ")",
+
   };
 
   return (

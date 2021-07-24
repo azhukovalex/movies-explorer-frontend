@@ -3,6 +3,13 @@
   flex: 1;
 }
 
+.card-list__text {
+  color: #555555;
+  font-size: 20px;
+  padding-top: 153px;
+}
+
+
 @media all and (max-width: 768px) {
   .movies {
     padding: 0 30px;

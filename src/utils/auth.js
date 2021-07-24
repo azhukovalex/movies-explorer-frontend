@@ -26,13 +26,15 @@ export const register = (data) => {
         });
 };
 
-export const authorize = (email, password) => {
+export const authorize = (data) => {
     return fetch(`${BASE_URL}/signin`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({             
+            email: data.email,
+            password: data.password }),
     })
         .then((res) => {
             if (res.status === 200) {

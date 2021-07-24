@@ -1,13 +1,13 @@
 import React from 'react';
 import './MoreBtn.css';
 
-function MoreBtn({ handleMoreBtn, isMoreBtnVisible }) {
+function MoreBtn({ setmoviesRendering, moviesRendering, moviesRenderingAdd }) {
   return (
-    isMoreBtnVisible &&
     <div className="more-btn">
-      <p className="more-btn__text" onClick={handleMoreBtn}>Ещё</p>
+      <p className="more-btn__text" onClick={() => setmoviesRendering(moviesRendering + moviesRenderingAdd)}>Ещё</p>
     </div>
   );
 }
 
 export default MoreBtn;
+

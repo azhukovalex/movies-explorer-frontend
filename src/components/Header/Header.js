@@ -5,7 +5,7 @@ import './Header.css';
 import { Link, useLocation } from 'react-router-dom';
 
 function Header(props) {
-  const { userData, loggedIn } = props;
+  const { LoggedIn } = props;
   const location = useLocation().pathname;
 
 
@@ -13,8 +13,7 @@ function Header(props) {
     <header className={(location === "/") ? "header" : (location === "/movies" || location === "/saved-movies" || location === "/profile") ? "header header__dark" : "header__none"} >
       <Link to='/'> <img className="header__logo" src={logo} alt="Логотип"></img></Link>
       <Navigation
-        userData={userData}
-        loggedIn={loggedIn} />
+          LoggedIn={LoggedIn} />
     </header>
   );
 }

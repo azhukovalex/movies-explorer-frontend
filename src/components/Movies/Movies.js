@@ -1,98 +1,74 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+
 import './Movies.css';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import SearchForm from '../SearchForm/SearchForm';
-import MoreBtn from '../MoreBtn/MoreBtn';
+import moviesApi from '../../utils/MoviesApi';
 import Preloader from '../Preloader/Preloader';
 
 function Movies(props) {
-    const { userData, currentUser, isLoading, movies, handleSetMovies, handleDeleteMovies, handleSaveMovies, resultMessage, imageUrl, handleSearchShortMovies, searchShortMovies } = props;
-    const [isMoreBtnVisible, setisMoreBtnVisible] = React.useState(false); // кнопка MoreBtn
-    const [renderedMovies, setRenderedMovies] = React.useState([]);
-    const [moviesRendering, setmoviesRendering] = React.useState(0); //добавка по MoreBtn
-    const [moviesRenderingAdd, setmoviesRenderingAdd] = React.useState(0);
-    const [checkboxOn, setcheckboxOn] = React.useState(false);
+  const {addMovieHandler, removeMovieHandler, handleSearch, searchKeyWord, imageUrl  } = props;
+  const [cards, setCards] = React.useState([]);
+  const [cardList, setCardsList] = React.useState([]);
+  const [moviesPreloader, setMoviesPreloader] = React.useState(false);
+  const [errorMoviesMessage, setMoviesErrorMessage] = React.useState('');
+  const [isOpenMovies, setIsOpenMovies] = React.useState(false);
+  const [isCSS, setIsCSS] =React.useState(false);
 
-    const location = useLocation().pathname;
-    const windowWidth = window.innerWidth;
 
-    function moviesRender() { //отрисовка по ширине        
-        if (windowWidth >= 1285) {
-            setmoviesRendering(12);
-            setmoviesRenderingAdd(6);
-        } else if (windowWidth < 1283 && windowWidth > 1000) {
-            setmoviesRendering(12);
-            setmoviesRenderingAdd(3);
-        } else if (windowWidth < 1279 && windowWidth > 768) {
-            setmoviesRendering(8);
-            setmoviesRenderingAdd(2);
-        } else {
-            setmoviesRendering(5);
-            setmoviesRenderingAdd(2);
-        }
+  React.useEffect(() => {
+    setMoviesPreloader(true);
+    moviesApi.getAllMovies()
+        .then((res) => {
+          console.log("movies:" + res);
+            setCards(res);
+        })
+        .catch((error) => {
+            console.log(error);
+            setIsOpenMovies(true);
+            setMoviesErrorMessage('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
+        })
+        .finally(() => {
+            setMoviesPreloader(false);
+        });
+
+}, [])
+
+
+  function handleSubmit(keyWord, isShort) {
+    console.log("поиск" + keyWord)
+    const found = handleSearch(cards, keyWord, isShort);
+    setCardsList(found);
+    setIsCSS(true);
+    if (found < 1) {
+      setIsOpenMovies(true);
+      setMoviesErrorMessage('Ничего не найдено');
     }
-
-    React.useEffect(() => {
-        moviesRender();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [windowWidth]);
-
-    function handleMoreBtn() {
-        setRenderedMovies(movies.slice(0, renderedMovies.length + moviesRenderingAdd));
-        if (renderedMovies.length >= movies.length - moviesRenderingAdd) {
-            setisMoreBtnVisible(false);
-        }
-    }
-
-    React.useEffect(() => {
-        if (location === '/movies') {
-            setRenderedMovies(movies.slice(0, moviesRendering));
-            if (movies.length <= moviesRendering) {
-                setisMoreBtnVisible(false);
-            } else {
-                setisMoreBtnVisible(true);
-            }
-        } else {
-            setRenderedMovies(movies);
-            setisMoreBtnVisible(false);
-        }
-    }, [location, movies, moviesRendering]);
+  }
 
 
-
-    // {isLoading && <Preloader />}
-    return (
-        <div className="movies">
-            {isLoading && <Preloader />}
-            <SearchForm
-                handleSetMovies={handleSetMovies}
-                handleSearchShortMovies={handleSearchShortMovies}
-                setcheckboxOn={setcheckboxOn}
-                checkboxOn={checkboxOn}
-            />
-
-            <MoviesCardList
-                currentUser={currentUser}
-                userData={userData}
-                searchShortMovies={searchShortMovies}
-                handleDeleteMovies={handleDeleteMovies}
-                handleSearchShortMovies={handleSearchShortMovies}
-                handleSaveMovies={handleSaveMovies}
-                handleSetMovies={handleSetMovies}
-                renderedMovies={renderedMovies}
-                resultMessage={resultMessage}
-                movies={movies}
-                imageUrl={imageUrl}
-                checkboxOn={checkboxOn}
-            />
-
-            <MoreBtn
-                isMoreBtnVisible={isMoreBtnVisible}
-                handleMoreBtn={handleMoreBtn}
-            />
-        </div>
-    );
+  return (
+    <div className="movies">
+      <SearchForm
+        handleSearch={handleSubmit}
+        searchKeyWord={searchKeyWord}
+        moviesPreloader={moviesPreloader}
+      />
+      {moviesPreloader ? <Preloader />
+        :
+        isOpenMovies ? <p className="card-list__text">{errorMoviesMessage}</p>
+          :
+          <MoviesCardList
+          isCSS={isCSS}
+            addMovieHandler={addMovieHandler}
+            removeMovieHandler={removeMovieHandler}
+            cardsData={cardList}
+            imageUrl={imageUrl }
+          />}
+    </div>
+  );
 }
 
 export default Movies;
+
+

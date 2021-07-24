@@ -59,6 +59,7 @@
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
 }
 .infotooltip-title {
+  color: white;
   font-weight: 900;
   font-size: 24px;
   line-height: 29px;
@@ -68,11 +69,12 @@
 
 .popup__container {
   position: fixed;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.205);
   color: black;
   border-radius: 209px;
   display: flex;
   flex-direction: column;
+  backdrop-filter: blur(7px);
 }
 .popup__tip {
   text-align: center;

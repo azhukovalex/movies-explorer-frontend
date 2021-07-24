@@ -98,7 +98,7 @@
 }
 
 .profile-form__submit__error {
-  color: rgba(255, 255, 255, 0.459);
+  color: rgba(255, 255, 255, 0.185);
 }
 .profile-form__submit__error:hover {
   opacity: 1;

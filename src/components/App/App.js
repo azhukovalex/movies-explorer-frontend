@@ -14,33 +14,36 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import * as auth from "../../utils/auth";
-import * as apiAllMovies from '../../utils/MoviesApi';
-import apiMain from '../../utils/MainApi';
+import MainApi from '../../utils/MainApi';
 import InfoTooltip from '../Tooltip/Tooltip';
 
 
 function App() {
-  const [movies, setMovies] = React.useState([]);
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [loggedIn, setIsLoggedIn] = React.useState(false);
-  const [resultMessage, setResultMessage] = React.useState('');
+
+
+
+
   const history = useHistory();
   const imageUrl = 'https://api.nomoreparties.co';
   const [token, setToken] = React.useState(''); // установка токена
-  const [userData, setUserData] = React.useState({});
   const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
   const [successToolTip, setSuccessToolTip] = React.useState(false);
   const [isTooltipProfile, setIsTooltipProfile] = React.useState(false);
   const [isTooltipLogin, setIsTooltipLogin] = React.useState(false);
+  const [isPreloader, setIsPreloader] = React.useState(false);
+  const [searchKeyWord, setSearchKeyWord] = React.useState('');
+  const [currentUser, setCurrentUser] = React.useState({
+    LoggedIn: true,
+    name: '',
+    email: '',
+    _id: '',
+    savedMoviesArray: [],
+  });
+
 
 
   //******************************   РЕГИСТРАЦИЯ И ВХОД    ************************************************************** */
-  React.useEffect(() => {
-    tokenChecking();
-    getUserContent();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loggedIn]);
+
   //закрыть попап
   function closeAllPopups() {
     setIsTooltipOpen(false);
@@ -68,15 +71,21 @@ function App() {
     };
   })
   //вход
-  function handleLoggedIn({ email, password }) {
+  function handleLoggedIn(values) {
+    setIsPreloader(true);
     return auth
-      .authorize(email, password)
+      .authorize(values)
       .then((res) => {
         if (res && res.token) {
           localStorage.setItem("jwt", res.token);
           setToken(res.token);
-          setIsLoggedIn(true);
-          history.push("/movies");
+          setCurrentUser({
+            ...currentUser,
+            LoggedIn: true,
+          });
+          console.log(currentUser);
+          history.push("/movies"); // не работает
+        //  window.location.href = '/movies' // 
         } else {
           setIsTooltipLogin(true);
           setIsTooltipOpen(true);
@@ -88,16 +97,22 @@ function App() {
         setIsTooltipOpen(true);
         console.log(err);
       })
+      .finally(() => {
+        setIsPreloader(false);
+      });
   }
+
 
   // рега
   function handleRegister(values) {
+    setIsPreloader(true);
     return auth.register(values)
       .then((res) => {
         if (res) {
           setSuccessToolTip(true);
           setIsTooltipOpen(true);
-          history.push('/signin');
+         // setTimeout(handleLoggedIn(values), 00);
+          history.push('/movies')
         }
       })
       .catch((err) => {
@@ -105,280 +120,220 @@ function App() {
         setIsTooltipOpen(true);
         console.log(err);
       })
+      .finally(() => {
+        setIsPreloader(false);
+      });
   }
 
   // выход
   function handleLogOut() {
-    setIsLoggedIn(false);
+
     localStorage.removeItem("jwt");
-    history.push('/');
-  }
-
-
-  // проверка токена
-  function tokenChecking() {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      setToken(jwt)
-      auth.getContent(jwt)
-        .then((res) => {
-          if (res) {
-            setUserData({
-              id: res._id,
-              name: res.name,
-            });
-            setIsLoggedIn(true);
-            history.push('/')
-          } else {
-            localStorage.removeItem("jwt");
-
-          }
-        });
-    }
-  }
-  // запрос информации о пользователе и фильмах
-  function getUserContent() {
-    if (loggedIn) {
-      setIsLoading(true);
-      Promise.all([apiMain.getUserInform(token), apiMain.getAllMovies(token)])
-        .then((res) => {
-          const [user, moviesList] = res;
-          setCurrentUser(user);
-
-          localStorage.setItem('saved-movies', JSON.stringify(moviesList));
-          if (localStorage.getItem('movies') === null) {
-            localStorage.setItem('movies', JSON.stringify(moviesList));
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => setIsLoading(false))
-    }
+    localStorage.removeItem('searchKeyWord');
+     setCurrentUser({
+      LoggedIn: false,
+      name: '',
+      email: '',
+      id: '',
+      savedMoviesArray: [],
+    }); 
+    //history.push("/");  
+    history.go("/");  
+     
   }
 
   // обновление пользователя
   function handleUpdateUser({ name, email }) {
-    apiMain.updateProfileInfo({ name, email }, token)
+    setIsPreloader(true);
+    MainApi.updateProfileInfo({ name, email }, token)
       .then((userData) => {
         setCurrentUser({
+          ...currentUser,
           name: userData.name,
           email: userData.email
         });
         setIsTooltipProfile(true);
         setTimeout(setIsTooltipOpen(true), 100);
         setSuccessToolTip(true);
-
       })
       .catch((err) => {
+        console.log(err);
       })
+      .finally(() => {
+        setIsPreloader(false);
+      });
   }
-
   //**************************************************   ФИЛЬМЫ  ******************************************************* */
-
-
-  //получение фильмов и сохр. в localStor
-  function getMovies() {
-    setIsLoading(true)
-    apiAllMovies.getAllMovies()
-      .then((movies) => {
-        localStorage.setItem('movies', JSON.stringify(movies));
+  //handle search movies form
+  function handleSearch(cards, keyWord, isShort) {
+    localStorage.setItem('searchKeyWord', keyWord);
+    setSearchKeyWord(keyWord);
+    const arrayCards = [];
+    isShort ? cards.forEach((item) => {
+      item.nameRU.toLowerCase().includes(keyWord)
+        && item.duration < 40
+        && arrayCards.push(item);
+    }) :
+      cards.forEach((item) => {
+        item.nameRU.toLowerCase().includes(keyWord) && arrayCards.push(item);
       })
-      .catch(() => {
-        localStorage.removeItem('movies');
-      })
-      .finally(() => setIsLoading(false))
+    return arrayCards;
   }
 
-  // создание массива по ключ. слову
-  function handleSetMovies() {
-    if (localStorage.getItem('keyword') === null) {
-      localStorage.setItem('keyword', '');
-    }
-    if (localStorage.getItem('keyword').length > 0) {
-      getMovies();
-      const moviesData = searchMovies(localStorage.getItem('keyword'));
-      setMovies(moviesData);
-      const shortMovies = searchShortMovies(moviesData);
-      if (shortMovies) {
-        setMovies(shortMovies);
-        if (shortMovies.length === 0) {
-          setResultMessage('Ничего не найдено')
+
+
+  //handle like movie click 
+  function addMovieHandler(data) {
+    const token = localStorage.getItem('jwt');
+    (currentUser.savedMoviesArray.findIndex(item => item.movieId === data.movieId) === -1) &&
+      MainApi.createNewCard(data, token)
+        .then((res) => {
+          currentUser.savedMoviesArray.push(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+        });
+  }
+
+  function removeMovieHandler(data) {
+    console.log("в removeMovieHandler :" + data.id);
+    const id = data._id
+      || currentUser.savedMoviesArray.find(item => item.movieId === data.id).id;
+    const token = localStorage.getItem('jwt');
+    MainApi.deleteCard(id, token)
+      .then((res) => {
+        currentUser.savedMoviesArray = currentUser.savedMoviesArray.filter((item) => item.movieId !== res.movieId);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+      });
+  }
+
+  ///////////////////////////////    ПОЛУЧЕНИЕ И ПРОВЕРКА ДАННЫХ ПОЛЬЗОВАТЕЛЯ    ///////////////////////////////////
+
+  const getUserData = React.useCallback((tokenParam) => {
+    setIsPreloader(true);
+    Promise.all([MainApi.getUserInform(tokenParam), MainApi.getMovies(tokenParam)])
+      .then(([userData, savedMovies]) => {
+        if (!!userData && !!savedMovies) {
+          setCurrentUser({
+            LoggedIn: true,
+            name: userData.name,
+            email: userData.email,
+            id: userData.id,
+            savedMoviesArray: savedMovies.filter((item) => item.owner === currentUser.id),
+          });
+          setSearchKeyWord(localStorage.getItem('searchKeyWord'));
         }
-      }
-    }
-    else {
-      setMovies([]);
-      if (movies === undefined) {
-        setResultMessage("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
-      }
-    }
-    localStorage.removeItem('keyword');
-  }
-
-  //фильтр короткого метра кнопкой
-  function searchShortMovies(massive) {
-    if (massive) {
-      if (localStorage.getItem('check') === "on" && massive.length > 0) {
-        const shortDuration = 40;
-        const findMoviesShort = massive.filter(item => item.duration <= shortDuration);
-        return (findMoviesShort);
-      }
-      if (massive.length === 0) {
-        return massive;
-      }
-    }
-  }
-
-  // срабатывает чекбокс по короткометражкам и отрисовка полученного массива
-  function handleSearchShortMovies() {
-    handleSetMovies();
-    if (movies !== []) {
-      const shortMovies = searchShortMovies(movies);
-      if (shortMovies) {
-        setMovies(shortMovies);
-      }
-    }
-  }
-
-  // фильтрация фильмов 
-  function searchMovies(key) {
-    function choosePageMassive() {
-      return document.getElementById("allMovies") ? JSON.parse(localStorage.getItem('movies')) : JSON.parse(localStorage.getItem('saved-movies')); //если поиск на /movies
-    }
-    const movies = choosePageMassive();
-    if (movies) {
-      const findMovies = movies.filter(item => item.nameRU.toLowerCase().includes(key.toLowerCase())); //поиск в названии по ключу
-      return findMovies;
-    }
-  }
-
-  // сохранить фильм по модели
-  function handleSaveMovies(movieCard) {
-    console.log(token);
-    apiMain.createNewCard({
-      country: movieCard.country || ' ',
-      director: movieCard.director || ' ',
-      duration: movieCard.duration.toString(),
-      year: movieCard.year || ' ',
-      description: movieCard.description || ' ',
-      image: `${imageUrl}${movieCard.image.url}` || ' ',
-      trailer: movieCard.trailerLink || ' ',
-      nameRU: movieCard.nameRU,
-      nameEN: movieCard.nameEN || ' ',
-      thumbnail: `${imageUrl}${movieCard.image.formats.thumbnail.url}` || ' ',
-      movieId: movieCard.id,
-    }, token)
-      .then((movieData) => {
-        apiMain.getAllMovies(token)
-          .then((moviesList) => {
-            localStorage.setItem('saved-movies', JSON.stringify(moviesList))
-          })
-          .catch((err) => {
-            console.log(err);
-          })
       })
       .catch((err) => {
+        setCurrentUser({
+          LoggedIn: false,
+          name: '',
+          email: '',
+          savedMoviesArray: [],
+        })
         console.log(err);
       })
-  }
+      .finally(() => {
+        setIsPreloader(false);
+      });
+  }, [currentUser.id])
 
-  // удалить фильм
-  function handleDeleteMovies(movieCard) {
-    apiMain.deleteCard(movieCard._id, token)
-      .then(() => {
-        apiMain.getAllMovies(token)
-          .then((moviesList) => {
-            localStorage.setItem('saved-movies', JSON.stringify(moviesList))
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  }
+
+  const handleTokenCheck = React.useCallback(() => {
+    const token = localStorage.getItem('jwt');
+    setToken(token);
+    if (token) {
+      getUserData(token);
+    } else {
+      setCurrentUser({
+        LoggedIn: false,
+        name: '',
+        email: '',
+        savedMoviesArray: [],
+      });
+    }
+  }, [getUserData])
+
+
+
+ React.useEffect(() => {
+   handleTokenCheck();
+    setSearchKeyWord(localStorage.getItem('searchKeyWord'));
+  }, [handleTokenCheck]);
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
-      <div className='App'>
-        <Header userData={userData}
-          loggedIn={loggedIn} />
-
+    <div className='App'>
+      <CurrentUserContext.Provider value={currentUser}>
+        <Header
+          LoggedIn={currentUser.LoggedIn}
+        />
         <Switch>
           <Route exact path="/">
             <Main />
           </Route>
 
-          <ProtectedRoute
-            exact path="/movies"
-            currentUser={currentUser}
-            userData={userData}
-            loggedIn={loggedIn}
+          <ProtectedRoute exact path="/movies"
             component={Movies}
-            searchShortMovies={searchShortMovies}
-            handleSaveMovies={handleSaveMovies}
-            resultMessage={resultMessage}
-            movies={movies}
-            handleSetMovies={handleSetMovies}
-            handleSearchShortMovies={handleSearchShortMovies}
-            handleDeleteMovies={handleDeleteMovies}
-            isLoading={isLoading}
-            imageUrl={imageUrl} />
-
-
-          <ProtectedRoute
-            exact path="/saved-movies"
-            userData={userData}
             currentUser={currentUser}
-            loggedIn={loggedIn}
-            component={SavedMovies}
-            movies={movies}
-            handleSetMovies={handleSetMovies}
-            resultMessage={resultMessage}
-            isLoading={isLoading}
-            handleSearchShortMovies={handleSearchShortMovies}
-            handleDeleteMovies={handleDeleteMovies}
-            searchShortMovies={searchShortMovies}
-            apiMain={apiMain.getAllMovies}
-            getUserContent={getUserContent}
+            searchKeyWord={searchKeyWord}
+            handleSearch={handleSearch}
+            removeMovieHandler={removeMovieHandler}
+            addMovieHandler={addMovieHandler}
+            LoggedIn={currentUser.LoggedIn}
+            imageUrl={imageUrl}
           />
 
-          <ProtectedRoute
-            loggedIn={loggedIn}
-            path="/profile"
+          <ProtectedRoute exact path="/saved-movies"
+            component={SavedMovies}
+            isPreloader={isPreloader}
+            currentUser={currentUser}
+            imageUrl={imageUrl}
+            searchKeyWord={searchKeyWord}
+            handleSearch={handleSearch}
+            removeMovieHandler={removeMovieHandler}
+            MainApi={MainApi.getAllMovies}
+            LoggedIn={currentUser.LoggedIn}
+            setCurrentUser={setCurrentUser}
+          />
+
+          <ProtectedRoute exact path="/profile"
             component={Profile}
             handleLogOut={handleLogOut}
             onUpdateUser={handleUpdateUser}
-            userData={userData} />
+            LoggedIn={currentUser.LoggedIn}
+            currentUser={currentUser}
+            isPreloader={isPreloader}
+          />
 
-          <Route path="/signup">
+          <Route exact path="/signup">
             <Register
-              loggedIn={loggedIn}
-              setIsLoggedIn={setIsLoggedIn}
-              onRegister={handleRegister} />
+              isPreloader={isPreloader}
+              onRegister={handleRegister}
+              LoggedIn={currentUser.LoggedIn}
+              {...currentUser.LoggedIn ? <Redirect to="/" /> : <Redirect to="/signup" />}
+            />
           </Route>
 
-          <Route path="/signin">
+          <Route exact path="/signin">
             <Login
-              setIsLoggedIn={setIsLoggedIn}
+              LoggedIn={currentUser.LoggedIn}
+              isPreloader={isPreloader}
               onLogin={handleLoggedIn} />
+            {currentUser.LoggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
           </Route>
 
           <Route path="*">
             <NotFoundError />
           </Route>
-
-          <Route exact path='/profile'>
-            {loggedIn
-              ? <Redirect to='/profile' />
-              : <Redirect to='/' />
-            }
-          </Route>
-
         </Switch>
         <Footer />
+
         <InfoTooltip
           isTooltipOpen={isTooltipOpen}
           onClose={closeAllPopups}
@@ -386,8 +341,9 @@ function App() {
           isTooltipProfile={isTooltipProfile}
           isTooltipLogin={isTooltipLogin}
         />
-      </div>
-    </CurrentUserContext.Provider>
+
+      </CurrentUserContext.Provider>
+    </div>
   );
 }
 
