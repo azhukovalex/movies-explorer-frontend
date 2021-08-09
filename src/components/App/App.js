@@ -108,7 +108,7 @@ function App() {
         if (res) {
           setSuccessToolTip(true);
           setIsTooltipOpen(true);
-          // setTimeout(handleLoggedIn(values), 00);
+           setTimeout(handleLoggedIn(values), 100);
           history.push('/movies')
         }
       })
