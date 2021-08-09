@@ -1,4 +1,5 @@
 export const BASE_URL = "https://azhukovalexback.vint1024.ru";
+//export const BASE_URL = "http://localhost:3001";
 
 export const register = (data) => {
     return fetch(`${BASE_URL}/signup`, {

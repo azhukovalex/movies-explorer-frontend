@@ -3,7 +3,6 @@ import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import MoreBtn from '../MoreBtn/MoreBtn';
 
-
 function MoviesCardList(props) {
   const { removeMovieHandler, addMovieHandler, cardsData, handleDelMovie, imageUrl, isCSS } = props;
   const windowWidth = window.innerWidth;

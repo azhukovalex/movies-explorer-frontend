@@ -15,7 +15,7 @@ function Login(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onLogin(values).then(() => {
-      history.push("/");
+      history.push("/movies");
     })
       .catch((err) => {
         console.log(err);
@@ -25,7 +25,6 @@ function Login(props) {
 
 
   return (
-    <>
       <div className="login">
         {isPreloader ? <Preloader />
 
@@ -62,7 +61,6 @@ function Login(props) {
           </form>
         }
       </div>
-    </>
   );
 }
 

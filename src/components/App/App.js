@@ -11,18 +11,12 @@ import NotFoundError from '../NotFoundError/NotFoundError';
 import Profile from '../Profile/Profile';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
-
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import * as auth from "../../utils/auth";
 import MainApi from '../../utils/MainApi';
 import InfoTooltip from '../Tooltip/Tooltip';
 
-
 function App() {
-
-
-
-
   const history = useHistory();
   const imageUrl = 'https://api.nomoreparties.co';
   const [token, setToken] = React.useState(''); // установка токена
@@ -40,8 +34,6 @@ function App() {
     savedMoviesArray: [],
   });
 
-
-
   //******************************   РЕГИСТРАЦИЯ И ВХОД    ************************************************************** */
 
   //закрыть попап
@@ -49,18 +41,21 @@ function App() {
     setIsTooltipOpen(false);
     setSuccessToolTip(false);
   }
+
   //эскейп
   function handleEscClose(e) {
     if (e.key === 'Escape') {
       closeAllPopups();
     }
   }
+
   //оверлэй
   function handlerOverlayClick(e) {
     if (e.target.classList.contains('popup')) {
       closeAllPopups();
     }
   }
+
   //слушатели для попапа
   React.useEffect(() => {
     window.addEventListener('keydown', handleEscClose);
@@ -70,6 +65,7 @@ function App() {
       window.removeEventListener('keydown', handleEscClose);
     };
   })
+  
   //вход
   function handleLoggedIn(values) {
     setIsPreloader(true);
@@ -84,8 +80,9 @@ function App() {
             LoggedIn: true,
           });
           console.log(currentUser);
+          handleTokenCheck();
           history.push("/movies"); // не работает
-        //  window.location.href = '/movies' // 
+          //  window.location.href = '/movies' // 
         } else {
           setIsTooltipLogin(true);
           setIsTooltipOpen(true);
@@ -111,7 +108,7 @@ function App() {
         if (res) {
           setSuccessToolTip(true);
           setIsTooltipOpen(true);
-         // setTimeout(handleLoggedIn(values), 00);
+          // setTimeout(handleLoggedIn(values), 00);
           history.push('/movies')
         }
       })
@@ -127,19 +124,19 @@ function App() {
 
   // выход
   function handleLogOut() {
-
     localStorage.removeItem("jwt");
     localStorage.removeItem('searchKeyWord');
-     setCurrentUser({
+    localStorage.removeItem('movies');
+    setCurrentUser({
       LoggedIn: false,
       name: '',
       email: '',
       id: '',
       savedMoviesArray: [],
-    }); 
+    });
     //history.push("/");  
-    history.go("/");  
-     
+    history.go("/");
+
   }
 
   // обновление пользователя
@@ -163,7 +160,9 @@ function App() {
         setIsPreloader(false);
       });
   }
+
   //**************************************************   ФИЛЬМЫ  ******************************************************* */
+
   //handle search movies form
   function handleSearch(cards, keyWord, isShort) {
     localStorage.setItem('searchKeyWord', keyWord);
@@ -180,9 +179,7 @@ function App() {
     return arrayCards;
   }
 
-
-
-  //handle like movie click 
+  //лайк
   function addMovieHandler(data) {
     const token = localStorage.getItem('jwt');
     (currentUser.savedMoviesArray.findIndex(item => item.movieId === data.movieId) === -1) &&
@@ -197,10 +194,11 @@ function App() {
         });
   }
 
+  //дизлайк
   function removeMovieHandler(data) {
     console.log("в removeMovieHandler :" + data.id);
     const id = data._id
-      || currentUser.savedMoviesArray.find(item => item.movieId === data.id).id;
+      || currentUser.savedMoviesArray.find(item => item.movieId === data.id)._id;
     const token = localStorage.getItem('jwt');
     MainApi.deleteCard(id, token)
       .then((res) => {
@@ -215,6 +213,7 @@ function App() {
 
   ///////////////////////////////    ПОЛУЧЕНИЕ И ПРОВЕРКА ДАННЫХ ПОЛЬЗОВАТЕЛЯ    ///////////////////////////////////
 
+  //получение данных
   const getUserData = React.useCallback((tokenParam) => {
     setIsPreloader(true);
     Promise.all([MainApi.getUserInform(tokenParam), MainApi.getMovies(tokenParam)])
@@ -244,7 +243,7 @@ function App() {
       });
   }, [currentUser.id])
 
-
+//проверка
   const handleTokenCheck = React.useCallback(() => {
     const token = localStorage.getItem('jwt');
     setToken(token);
@@ -261,9 +260,9 @@ function App() {
   }, [getUserData])
 
 
-
- React.useEffect(() => {
-   handleTokenCheck();
+//
+  React.useEffect(() => {
+    handleTokenCheck();
     setSearchKeyWord(localStorage.getItem('searchKeyWord'));
   }, [handleTokenCheck]);
 

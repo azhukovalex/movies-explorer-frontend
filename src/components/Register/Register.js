@@ -20,7 +20,6 @@ function Register(props) {
 
 
   return (
-    <>
       <div className="reg">
         {isPreloader ? <Preloader />
         
@@ -73,7 +72,6 @@ function Register(props) {
           </form>
         }
       </div>
-    </>
   );
 }
 

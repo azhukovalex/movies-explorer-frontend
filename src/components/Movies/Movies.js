@@ -13,33 +13,37 @@ function Movies(props) {
   const [moviesPreloader, setMoviesPreloader] = React.useState(false);
   const [errorMoviesMessage, setMoviesErrorMessage] = React.useState('');
   const [isOpenMovies, setIsOpenMovies] = React.useState(false);
-  const [isCSS, setIsCSS] =React.useState(false);
 
 
   React.useEffect(() => {
-    setMoviesPreloader(true);
-    moviesApi.getAllMovies()
+    const movies = JSON.parse(localStorage.getItem("movies"));
+    if (movies < 1) {
+      setMoviesPreloader(true);
+      moviesApi.getAllMovies()
         .then((res) => {
-          console.log("movies:" + res);
-            setCards(res);
+          localStorage.setItem("movies", JSON.stringify(res));
         })
         .catch((error) => {
-            console.log(error);
-            setIsOpenMovies(true);
-            setMoviesErrorMessage('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
+          console.log(error);
+          setIsOpenMovies(true);
+          setMoviesErrorMessage('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
         })
         .finally(() => {
-            setMoviesPreloader(false);
+          const movies = JSON.parse(localStorage.getItem("movies"));
+          setCards(movies);
+         setMoviesPreloader(false);
         });
-
-}, [])
+    }
+    else {
+      setCards(movies);
+    }
+  }, [])
 
 
   function handleSubmit(keyWord, isShort) {
     console.log("поиск" + keyWord)
     const found = handleSearch(cards, keyWord, isShort);
     setCardsList(found);
-    setIsCSS(true);
     if (found < 1) {
       setIsOpenMovies(true);
       setMoviesErrorMessage('Ничего не найдено');
@@ -59,7 +63,6 @@ function Movies(props) {
         isOpenMovies ? <p className="card-list__text">{errorMoviesMessage}</p>
           :
           <MoviesCardList
-          isCSS={isCSS}
             addMovieHandler={addMovieHandler}
             removeMovieHandler={removeMovieHandler}
             cardsData={cardList}

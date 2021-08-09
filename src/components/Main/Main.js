@@ -9,7 +9,6 @@ import Portfolio from '../Portfolio/Portfolio';
 function Main() {
 
   return (
-    <>
       <main className='main'>
         <Promo />
         <AboutProject />
@@ -17,7 +16,6 @@ function Main() {
         <AboutMe />
         <Portfolio />
       </main>
-    </>
   )
 }
 

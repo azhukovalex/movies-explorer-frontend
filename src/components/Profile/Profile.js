@@ -22,7 +22,6 @@ function Profile(props) {
   }
 
   return (
-    <>
       <div className="profile">
         {isPreloader ? <Preloader />
 
@@ -42,11 +41,10 @@ function Profile(props) {
               <span className="profile__valid-email profile__valid-email_non-valid">{errors.email || ''}</span>
             </label>
             <button className={ClassBtnDisabled} type="submit" disabled={!isValid || isPreloader}>Редактировать</button>
-            <Link to="/signin" onClick={handleLogOut} className="profile-form__link">Выйти из аккаунта</Link>
+            <Link to="/" onClick={handleLogOut} className="profile-form__link">Выйти из аккаунта</Link>
           </form>
         }
       </div>
-    </>
   );
 }
 

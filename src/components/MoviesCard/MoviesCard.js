@@ -5,9 +5,6 @@ import add from "../../images/UnSavedLable.svg";
 import addActive from "../../images/SavedLable.svg";
 import deleteBtn from "../../images/DeleteMovieBtn.svg";
 import deleteBtnHover from "../../images/DeleteMovieBtnHover.svg";
-
-
-
 import { CurrentUserContext } from '../../contexts/CurrentUserContext.js'; //контекст
 
 function MoviesCard(props) {
@@ -19,10 +16,7 @@ function MoviesCard(props) {
   const btnDelHover = `${isHover ? deleteBtnHover : deleteBtn}`;
 
   const [isLiked, setIsLiked] = useState( ///использование стейта как написано в ТЗ к работе, проверить
-    currentUser.savedMoviesArray.findIndex(item => item.movieId === props.data.id) > -1);
-
-  
- 
+    currentUser.savedMoviesArray.findIndex(item => item.movieId === props.data.id) > -1); 
 
   //значок удаления при hover
   function handleDelHover() {
