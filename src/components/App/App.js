@@ -15,6 +15,8 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import * as auth from "../../utils/auth";
 import MainApi from '../../utils/MainApi';
 import InfoTooltip from '../Tooltip/Tooltip';
+import { SHORT_DURATION } from "../../utils/configs";
+import moviesApi from '../../utils/MoviesApi';
 
 function App() {
   const history = useHistory();
@@ -33,6 +35,12 @@ function App() {
     _id: '',
     savedMoviesArray: [],
   });
+
+  const [cardList, setCardsList] = React.useState([]);
+  const [isOpenMovies, setIsOpenMovies] = React.useState(false);
+  const [cards, setCards] = React.useState([]);
+  const [moviesPreloader, setMoviesPreloader] = React.useState(false);
+  const [errorMoviesMessage, setMoviesErrorMessage] = React.useState('');
 
   //******************************   РЕГИСТРАЦИЯ И ВХОД    ************************************************************** */
 
@@ -65,7 +73,7 @@ function App() {
       window.removeEventListener('keydown', handleEscClose);
     };
   })
-  
+
   //вход
   function handleLoggedIn(values) {
     setIsPreloader(true);
@@ -81,8 +89,7 @@ function App() {
           });
           console.log(currentUser);
           handleTokenCheck();
-          history.push("/movies"); // не работает
-          //  window.location.href = '/movies' // 
+          history.push("/movies");
         } else {
           setIsTooltipLogin(true);
           setIsTooltipOpen(true);
@@ -108,7 +115,7 @@ function App() {
         if (res) {
           setSuccessToolTip(true);
           setIsTooltipOpen(true);
-           setTimeout(handleLoggedIn(values), 100);
+          setTimeout(handleLoggedIn(values), 100);
           history.push('/movies')
         }
       })
@@ -124,9 +131,10 @@ function App() {
 
   // выход
   function handleLogOut() {
-    localStorage.removeItem("jwt");
-    localStorage.removeItem('searchKeyWord');
     localStorage.removeItem('movies');
+    localStorage.removeItem('lastSearch');
+    localStorage.removeItem('searchKeyWord');
+    localStorage.removeItem("jwt");
     setCurrentUser({
       LoggedIn: false,
       name: '',
@@ -165,19 +173,22 @@ function App() {
 
   //handle search movies form
   function handleSearch(cards, keyWord, isShort) {
+    //localStorage.removeItem('lastSearch');
     localStorage.setItem('searchKeyWord', keyWord);
     setSearchKeyWord(keyWord);
     const arrayCards = [];
     isShort ? cards.forEach((item) => {
       item.nameRU.toLowerCase().includes(keyWord)
-        && item.duration < 40
+        && item.duration < SHORT_DURATION
         && arrayCards.push(item);
     }) :
       cards.forEach((item) => {
         item.nameRU.toLowerCase().includes(keyWord) && arrayCards.push(item);
       })
+    // localStorage.setItem('lastSearch', JSON.stringify(arrayCards));
     return arrayCards;
   }
+
 
   //лайк
   function addMovieHandler(data) {
@@ -211,6 +222,43 @@ function App() {
       });
   }
 
+//загрузка массива фильмов со стороннего апи, если в localStorage пусто
+  React.useEffect(() => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      const movies = JSON.parse(localStorage.getItem("movies"));
+      if (movies < 1) {
+        setMoviesPreloader(true);
+        moviesApi.getAllMovies()
+          .then((res) => {
+            localStorage.setItem("movies", JSON.stringify(res));
+          })
+          .catch((error) => {
+            console.log(error);
+            setIsOpenMovies(true);
+            setMoviesErrorMessage('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
+          })
+          .finally(() => {
+            setCards(JSON.parse(localStorage.getItem("movies")));
+            setMoviesPreloader(false);
+          });
+      }
+      else {
+        setCards(movies);
+      }
+    }
+  }, [token]);
+
+  //сохранение и отображение последнего поиска
+  React.useEffect(() => {
+    const isLastSearch = JSON.parse(localStorage.getItem('lastSearch'));
+    if (isLastSearch) {
+      setIsOpenMovies(false);
+      setCardsList(isLastSearch);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   ///////////////////////////////    ПОЛУЧЕНИЕ И ПРОВЕРКА ДАННЫХ ПОЛЬЗОВАТЕЛЯ    ///////////////////////////////////
 
   //получение данных
@@ -243,7 +291,7 @@ function App() {
       });
   }, [currentUser.id])
 
-//проверка
+  //проверка
   const handleTokenCheck = React.useCallback(() => {
     const token = localStorage.getItem('jwt');
     setToken(token);
@@ -260,7 +308,7 @@ function App() {
   }, [getUserData])
 
 
-//
+  //
   React.useEffect(() => {
     handleTokenCheck();
     setSearchKeyWord(localStorage.getItem('searchKeyWord'));
@@ -279,6 +327,14 @@ function App() {
 
           <ProtectedRoute exact path="/movies"
             component={Movies}
+            cards={cards}
+            moviesPreloader={moviesPreloader}
+            errorMoviesMessage={errorMoviesMessage}
+            setMoviesErrorMessage={setMoviesErrorMessage}
+            cardList={cardList}
+            setCardsList={setCardsList}
+            isOpenMovies={isOpenMovies}
+            setIsOpenMovies={setIsOpenMovies}
             currentUser={currentUser}
             searchKeyWord={searchKeyWord}
             handleSearch={handleSearch}

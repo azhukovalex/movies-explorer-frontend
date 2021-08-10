@@ -2,11 +2,9 @@ import React from 'react';
 import './SearchForm.css';
 import shortOn from '../../images/ShortOn.svg';
 import shortOff from '../../images/ShortOff.svg';
-//import { useLocation } from 'react-router-dom';
 
 function SearchForm(props) {
   const { handleSearch, searchKeyWord, moviesPreloader, isPreloader } = props;
-  //
   const [keyWord, setKeyWord] = React.useState(searchKeyWord || '');
   const [isShort, setIsShort] = React.useState(false);
   const [isShown, setIsShown] = React.useState(false);

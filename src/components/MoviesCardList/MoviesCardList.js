@@ -2,6 +2,20 @@ import React from 'react';
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import MoreBtn from '../MoreBtn/MoreBtn';
+import {
+  LARGE_DISPLAY_MOVIES,
+  MIDDLE_DISPLAY_MOVIES,
+  MOBILE_DISPLAY_MOVIES,
+  ADD_EXTRA_LARGE_MOVIES,
+  ADD_LARGE_MOVIES,
+  ADD_MIDDLE_MOVIES,
+  EXTRA_LARGE_DISPLAY,
+  LARGE_DISPLAY_MAX,
+  LARGE_DISPLAY_MIN,
+  MIDDLE_DISPLAY_MAX,
+  MIDDLE_DISPLAY_MIN,
+} from "../../utils/configs";
+
 
 function MoviesCardList(props) {
   const { removeMovieHandler, addMovieHandler, cardsData, handleDelMovie, imageUrl, isCSS } = props;
@@ -10,18 +24,18 @@ function MoviesCardList(props) {
   const [moviesRenderingAdd, setmoviesRenderingAdd] = React.useState(0); //setCountAdd
 
   function moviesRender() { //отрисовка по ширине        
-    if (windowWidth >= 1285) {
-      setmoviesRendering(12);
-      setmoviesRenderingAdd(6);
-    } else if (windowWidth < 1283 && windowWidth > 1000) {
-      setmoviesRendering(12);
-      setmoviesRenderingAdd(3);
-    } else if (windowWidth < 1279 && windowWidth > 768) {
-      setmoviesRendering(8);
-      setmoviesRenderingAdd(2);
+    if (windowWidth >= EXTRA_LARGE_DISPLAY) {
+      setmoviesRendering(LARGE_DISPLAY_MOVIES);
+      setmoviesRenderingAdd(ADD_EXTRA_LARGE_MOVIES);
+    } else if (windowWidth < LARGE_DISPLAY_MAX && windowWidth > LARGE_DISPLAY_MIN) {
+      setmoviesRendering(LARGE_DISPLAY_MOVIES);
+      setmoviesRenderingAdd(ADD_LARGE_MOVIES);
+    } else if (windowWidth < MIDDLE_DISPLAY_MAX && windowWidth > MIDDLE_DISPLAY_MIN) {
+      setmoviesRendering(MIDDLE_DISPLAY_MOVIES);
+      setmoviesRenderingAdd(ADD_MIDDLE_MOVIES);
     } else {
-      setmoviesRendering(5);
-      setmoviesRenderingAdd(2);
+      setmoviesRendering(MOBILE_DISPLAY_MOVIES);
+      setmoviesRenderingAdd(ADD_MIDDLE_MOVIES);
     }
   }
 
@@ -38,7 +52,7 @@ function MoviesCardList(props) {
           cardsData.slice(0, moviesRendering).map((item) => {
             return (
               <MoviesCard
-              isCSS={isCSS}
+                isCSS={isCSS}
                 key={item.id || item.movieId}
                 data={item}
                 image={!!imageUrl ? imageUrl.concat(item.image.url) : item.image}

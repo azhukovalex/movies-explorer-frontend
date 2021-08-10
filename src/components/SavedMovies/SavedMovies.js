@@ -6,7 +6,7 @@ import Preloader from '../Preloader/Preloader';
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function SavedMovies(props) {
-  const { isPreloader, handleSearch, removeMovieHandler, searchKeyWord, } = props;
+  const { isPreloader, handleSearch, removeMovieHandler, searchKeyWord,  } = props;
   const currentUser = React.useContext(CurrentUserContext);
   const [cardList, setCardsList] = React.useState([]);
   const [savedMovieEerorMessage, setSavedMovieEerorMessage] = React.useState('');
@@ -25,6 +25,11 @@ function SavedMovies(props) {
     removeMovieHandler(data);
     setCardsList(currentUser.savedMoviesArray.filter((item) => item.movieId !== data.movieId));
   }
+  React.useEffect(() => {
+    if (currentUser) {setCardsList(currentUser.savedMoviesArray)}    
+    }
+  , [currentUser]) 
+
 
   return (
     <div className="movies__main-saved">
