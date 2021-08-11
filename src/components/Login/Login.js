@@ -48,7 +48,7 @@ function Login(props) {
               value={values.email}
               disabled={isPreloader} 
               onChange={handleChange} />
-            <span className="login-form__valid-text login-form__valid-text_non-valid">{errors.email || ''}</span>
+            <div className="login-form__valid-text login-form__valid-text_non-valid">{errors.email || ''}</div>
             <label className="login-form__label">Пароль</label>
             <input className={NavClassPassword}
               minLength={6}
@@ -59,11 +59,11 @@ function Login(props) {
               required
               onChange={handleChange} 
               disabled={isPreloader} />
-            <span className="login-form__valid-text login-form__valid-text_non-valid">{errors.password || ''}</span>
+            <div className="login-form__valid-text login-form__valid-text_non-valid">{errors.password || ''}</div>
             <button className={ClassNameDisabled}
               type="submit"
               disabled={!isValid || isPreloader}>Войти</button>
-            <span className="login-form__text">Еще не зарегистрированы?&nbsp;<Link to="/signup" className="login-form__link">Регистрация</Link></span>
+            <div className="login-form__text">Еще не зарегистрированы?&nbsp;<Link to="/signup" className="login-form__link">Регистрация</Link></div>
           </form>
         }
       </div>
