@@ -1,4 +1,6 @@
 .promo {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   background-color: #073042;
   /* width: 100%; */

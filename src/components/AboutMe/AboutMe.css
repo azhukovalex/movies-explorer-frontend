@@ -10,8 +10,12 @@
 
 .about-me__main {
   padding-top: 48px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .about-me__info {
@@ -52,6 +56,8 @@
   font-size: 14px;
   max-width: 600px;
   font-weight: 400;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   padding: 0;
   gap: 20px;
@@ -69,6 +75,8 @@
 }
 .about-me__link:hover {
   opacity: 0.8;
+  -webkit-transition: opacity 0.2s linear;
+  -o-transition: opacity 0.2s linear;
   transition: opacity 0.2s linear;
 }
 
@@ -107,7 +115,10 @@
 
 @media (max-width: 720px) {
   .about-me__main {
-    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
 
   .about-me__photo {
@@ -115,7 +126,10 @@
     max-height: 308px;
   }
   .about-me__main {
-    flex-direction: column-reverse;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+        -ms-flex-direction: column-reverse;
+            flex-direction: column-reverse;
   }
 }
 
@@ -132,7 +146,9 @@
   .about-me__photo {
     max-width: 292px;
     max-height: 352px;
-    align-self: center;
+    -ms-flex-item-align: center;
+        -ms-grid-row-align: center;
+        align-self: center;
   }
   .about-me__name {
 font-size: 30px;

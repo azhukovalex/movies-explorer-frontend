@@ -1,26 +1,36 @@
-
-
-
-
 .card {
   min-height: 258px;
   max-width: 364px;
   width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   background-color: #222222;
   
 }
 
 .card__info {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   padding: 14px;
 }
 
 .card__description {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   font-family: inter;
   
 }
@@ -30,7 +40,8 @@
   font-weight: 500;
   margin: 0;
   color: white;
-  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+     text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   max-width: 213px;
@@ -49,7 +60,9 @@
   border: none;
   background-color: transparent;
   cursor: pointer;
-  transition-duration: .2s;
+  -webkit-transition-duration: .2s;
+       -o-transition-duration: .2s;
+          transition-duration: .2s;
 
 }
 
@@ -67,7 +80,7 @@
   color: white;
   height: 205px;
   width: 100%;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   
 }
-
