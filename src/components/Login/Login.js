@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from '../../images/logo__COLOR_main-1.svg';
+import logoHover from '../../images/logo-hover.svg';
 import { Link, useHistory } from 'react-router-dom';
 import './Login.css';
 import { useFormWithValidation } from '../../utils/utils';
@@ -11,6 +12,8 @@ function Login(props) {
   const NavClassPassword = `${isValid ? "login-form__input" : "login-form__input login-form__input__error"}`;
   const ClassNameDisabled = `${isValid ? "login-form__submit" : "login-form__submit login-form__submit__error"}`;
   const history = useHistory();
+  const [isHover, setIsHover] = React.useState(false);
+  const btnLogoHover = `${isHover ? logoHover : logo}`;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,6 +26,9 @@ function Login(props) {
     resetForm();
   };
 
+  function handleLogoHover() {
+    setIsHover(!isHover);
+  }
 
   return (
       <div className="login">
@@ -31,7 +37,7 @@ function Login(props) {
           :
 
           <form className="login-form" onSubmit={handleSubmit}>
-            <Link className="login-form__logo-link" to='/'> <img src={logo} alt="Логотип" className="login-form__logo" /> </Link>
+            <Link className="login-form__logo-link" to='/'> <img src={btnLogoHover} alt="Логотип" className="login-form__logo" onMouseEnter={handleLogoHover} onMouseLeave={handleLogoHover} /> </Link>
             <h1 className="login-form__title">Рады видеть!</h1>
             <label className="login-form__label">          E-mail   </label>
             <input className="login-form__input"
