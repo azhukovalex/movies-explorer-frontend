@@ -1,0 +1,19 @@
+.more-btn {
+  display: flex;
+  width: 100%;
+  background-color: #2F2F2F;
+  color: white;
+  text-align: center;
+  justify-content: center;
+  height: 36px;
+  margin-top: 50px;
+  margin-bottom: 80px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.more-btn__text {
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 500;
+}

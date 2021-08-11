@@ -1,0 +1,31 @@
+.header {
+  display: flex;
+  background-color: #073042;
+  padding: 15px 70px;
+  justify-content: space-between;
+  font-family: inter;
+}
+
+.header__logo {
+  align-content: center;
+}
+
+.header__dark {
+  background-color: #202020;
+}
+
+.header__none {
+  display: none;
+}
+
+@media all and (max-width: 768px) {
+  .header {
+    padding: 18px 30px;
+  }
+}
+
+@media all and (max-width: 400px) {
+  .header {
+    padding: 18px 14px;
+  }
+}
