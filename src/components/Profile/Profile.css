@@ -114,8 +114,9 @@
 }
 
 .profile-form__link:hover {
-  opacity: 0.8;
-  transition: opacity 0.2s linear;
+
+  transition: opacity 0.3s linear;
+  background: radial-gradient(ellipse at center, #fc39397a 0%,#202020 85%);
 }
 
 @media all and (max-width: 768px) {

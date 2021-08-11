@@ -46,7 +46,6 @@ function MoviesCardList(props) {
 
   return (
     <>
-
       <div className="movies__card-list" id="allMovies">
         {
           cardsData.slice(0, moviesRendering).map((item) => {

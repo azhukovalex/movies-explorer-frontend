@@ -8,6 +8,9 @@
 
 .header__logo {
   align-content: center;
+  animation-duration: 2.5s;
+  animation-fill-mode: both;
+  animation-name: rot;
 }
 
 .header__dark {
@@ -27,5 +30,11 @@
 @media all and (max-width: 400px) {
   .header {
     padding: 18px 14px;
+  }
+}
+
+@keyframes rot {
+  from {
+    transform: rotate(360deg);
   }
 }

@@ -70,7 +70,7 @@
 .about-project__week-green {
   background-color: #3ddc84;
   color: #000000;
-  width: 21%;
+min-width: 21%;
   height: 36px;
   display: flex;
   justify-content: center;
