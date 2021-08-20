@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from '../../images/logo__COLOR_main-1.svg';
+import logoHover from '../../images/logo-hover.svg';
 import { Link } from 'react-router-dom';
 import './Register.css';
 import { useFormWithValidation } from '../../utils/utils';
@@ -11,6 +12,9 @@ function Register(props) {
 
   const ClassNameDisabled = `${isValid ? "reg-form__submit" : "reg-form__submit reg-form__submit__error"}`;
   const NavClassPassword = `${isValid ? "reg-form__input" : "reg-form__input reg-form__input__error"}`;
+  const [isHover, setIsHover] = React.useState(false);
+  const btnLogoHover = `${isHover ? logoHover : logo}`;
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,6 +22,9 @@ function Register(props) {
     resetForm();
   };
 
+  function handleLogoHover() {
+    setIsHover(!isHover);
+  }
 
   return (
       <div className="reg">
@@ -26,7 +33,7 @@ function Register(props) {
           :
 
           <form className="reg-form" onSubmit={handleSubmit} noValidate>
-            <Link className="reg-form__logo-link" to='/'> <img src={logo} alt="Логотип" className="reg-form__logo" /> </Link>
+            <Link className="reg-form__logo-link" to='/'> <img src={btnLogoHover} alt="Логотип" onMouseEnter={handleLogoHover} onMouseLeave={handleLogoHover} className="reg-form__logo" /> </Link>
             <h1 className="reg-form__title">Добро пожаловать!</h1>
             <label className="reg-form__label">Имя</label>
             <input className="reg-form__input"

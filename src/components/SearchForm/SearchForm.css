@@ -1,9 +1,18 @@
 .search-form {
   height: 220px; /*214*/
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   border-bottom: 1px solid #424242;
 }
 
@@ -20,8 +29,12 @@
 
 .search-form__block {
   width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   margin-top: 37px;
   gap: 10px;
 }
@@ -37,6 +50,8 @@
 .search-form__area:focus {
   outline: none;
   background-color: rgb(82, 81, 81);
+  -webkit-transition: background-color 0.2s linear;
+  -o-transition: background-color 0.2s linear;
   transition: background-color 0.2s linear;
 }
 .search-form__btn {
@@ -46,6 +61,8 @@
   min-height: 44px;
   background-image: url(../../images/search__logo.svg);
   background-repeat: no-repeat;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   background-position: center;
   border: none;
@@ -53,6 +70,8 @@
 }
 .search-form__btn:hover {
   background-color: #1067f3;
+  -webkit-transition: background-color 0.2s linear;
+  -o-transition: background-color 0.2s linear;
   transition: background-color 0.2s linear;
 }
 
@@ -61,8 +80,12 @@
   color: white;
   font-size: 12px;
   font-weight: 400;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 .search-form__checkbox {
   display: none;
@@ -73,7 +96,9 @@
   height: 20px;
   background-repeat: no-repeat;
   padding-right: 12px;
-  transition-duration: 0.2s;
+  -webkit-transition-duration: 0.2s;
+       -o-transition-duration: 0.2s;
+          transition-duration: 0.2s;
 }
 
 @media all and (max-width: 768px) {

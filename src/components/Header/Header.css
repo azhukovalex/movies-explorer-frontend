@@ -1,13 +1,24 @@
 .header {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   background-color: #073042;
   padding: 15px 70px;
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   font-family: inter;
 }
 
 .header__logo {
-  align-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-animation-duration: 2.5s;
+          animation-duration: 2.5s;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  -webkit-animation-name: rot;
+          animation-name: rot;
 }
 
 .header__dark {
@@ -27,5 +38,19 @@
 @media all and (max-width: 400px) {
   .header {
     padding: 18px 14px;
+  }
+}
+
+@-webkit-keyframes rot {
+  from {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes rot {
+  from {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
   }
 }

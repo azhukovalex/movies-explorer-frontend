@@ -1,3 +1,10 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.3.6,
+* Autoprefixer: v10.3.1
+* Browsers: last 4 version
+*/
+
 .popup__image_login {
   width: 120px;
   height: 120px;
@@ -5,6 +12,7 @@
   background-repeat: no-repeat;
   margin: 60px auto 8px;
   -webkit-transition: visibility 0.5s, opacity 0.5s ease;
+  -o-transition: visibility 0.5s, opacity 0.5s ease;
   transition: visibility 0.5s, opacity 0.5s ease;
 }
 .popup_image:before {
@@ -24,6 +32,7 @@
   opacity: 0;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   -webkit-transition: visibility 0.5s, opacity 0.5s ease;
+  -o-transition: visibility 0.5s, opacity 0.5s ease;
   transition: visibility 0.5s, opacity 0.5s ease;
   position: fixed;
   top: 0;
@@ -72,9 +81,15 @@
   background-color: rgba(255, 255, 255, 0.205);
   color: black;
   border-radius: 209px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
-  backdrop-filter: blur(7px);
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-backdrop-filter: blur(7px);
+          backdrop-filter: blur(7px);
 }
 .popup__tip {
   text-align: center;
@@ -119,6 +134,7 @@
 
 .popup-image {
   -webkit-transition: visibility 0.5s, opacity 0.5s ease;
+  -o-transition: visibility 0.5s, opacity 0.5s ease;
   transition: visibility 0.5s, opacity 0.5s ease;
 }
 
@@ -136,6 +152,7 @@
 
 .popup-image {
   -webkit-transition: visibility 0.5s, opacity 0.5s ease;
+  -o-transition: visibility 0.5s, opacity 0.5s ease;
   transition: visibility 0.5s, opacity 0.5s ease;
 }
 
@@ -163,7 +180,9 @@
     text-align: center;
     width: 216px;
     height: 216px;
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 }
 .popup__image_login {
   margin: 17px auto 4px;

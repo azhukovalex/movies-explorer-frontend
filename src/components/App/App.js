@@ -143,7 +143,7 @@ function App() {
       savedMoviesArray: [],
     });
     //history.push("/");  
-    history.go("/");
+    //history.go("/");
 
   }
 

@@ -1,6 +1,8 @@
 .movies {
   padding: 0 70px;
-  flex: 1;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
 }
 
 .card-list__text {

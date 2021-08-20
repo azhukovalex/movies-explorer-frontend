@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from '../../images/logo__COLOR_main-1.svg';
+import logoHover from '../../images/logo-hover.svg';
 import { Link, useHistory } from 'react-router-dom';
 import './Login.css';
 import { useFormWithValidation } from '../../utils/utils';
@@ -11,6 +12,8 @@ function Login(props) {
   const NavClassPassword = `${isValid ? "login-form__input" : "login-form__input login-form__input__error"}`;
   const ClassNameDisabled = `${isValid ? "login-form__submit" : "login-form__submit login-form__submit__error"}`;
   const history = useHistory();
+  const [isHover, setIsHover] = React.useState(false);
+  const btnLogoHover = `${isHover ? logoHover : logo}`;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,6 +26,9 @@ function Login(props) {
     resetForm();
   };
 
+  function handleLogoHover() {
+    setIsHover(!isHover);
+  }
 
   return (
       <div className="login">
@@ -31,7 +37,7 @@ function Login(props) {
           :
 
           <form className="login-form" onSubmit={handleSubmit}>
-            <Link className="login-form__logo-link" to='/'> <img src={logo} alt="Логотип" className="login-form__logo" /> </Link>
+            <Link className="login-form__logo-link" to='/'> <img src={btnLogoHover} alt="Логотип" className="login-form__logo" onMouseEnter={handleLogoHover} onMouseLeave={handleLogoHover} /> </Link>
             <h1 className="login-form__title">Рады видеть!</h1>
             <label className="login-form__label">          E-mail   </label>
             <input className="login-form__input"
@@ -42,7 +48,7 @@ function Login(props) {
               value={values.email}
               disabled={isPreloader} 
               onChange={handleChange} />
-            <span className="login-form__valid-text login-form__valid-text_non-valid">{errors.email || ''}</span>
+            <div className="login-form__valid-text login-form__valid-text_non-valid">{errors.email || ''}</div>
             <label className="login-form__label">Пароль</label>
             <input className={NavClassPassword}
               minLength={6}
@@ -53,11 +59,11 @@ function Login(props) {
               required
               onChange={handleChange} 
               disabled={isPreloader} />
-            <span className="login-form__valid-text login-form__valid-text_non-valid">{errors.password || ''}</span>
+            <div className="login-form__valid-text login-form__valid-text_non-valid">{errors.password || ''}</div>
             <button className={ClassNameDisabled}
               type="submit"
               disabled={!isValid || isPreloader}>Войти</button>
-            <span className="login-form__text">Еще не зарегистрированы?&nbsp;<Link to="/signup" className="login-form__link">Регистрация</Link></span>
+            <div className="login-form__text">Еще не зарегистрированы?&nbsp;<Link to="/signup" className="login-form__link">Регистрация</Link></div>
           </form>
         }
       </div>
